@@ -1,29 +1,17 @@
 <template>
   <div id="calculator">
-    <div class="window">{{input}}</div>
+    <div class="window">
+      <span :class="{muted:result!==''}">{{first}}{{sign}}{{second}}</span>
+      {{result}}
+    </div>
     <div class="buttons">
-      <button>CE</button>
-      <button>C</button>
-      <button>
-        <=</button>
-          <button>%</button>
-          <button class="number">7</button>
-          <button class="number">8</button>
-          <button class="number">9</button>
-          <button>/</button>
-          <button class="number">4</button>
-          <button class="number">5</button>
-          <button class="number">6</button>
-          <button>*</button>
-          <button class="number">1</button>
-          <button class="number">2</button>
-          <button class="number">3</button>
-          <button>-</button>
-          <button disabled>.</button>
-          <button class="number">0</button>
-          <button>=</button>
-          <button>+</button>
-
+      <button @click="clearAll()">C</button>
+      <button @click="clearCurrent">CE</button>
+      <button @click="clearNumber">&lt;=</button>
+      <button v-for="s in signs" @click="addSign(s)" :key="s">{{s}}</button>
+      <button v-for="n in numbers" @click="addNumber(n)" class="number" :key="n">{{n}}</button>
+      <button disabled>.</button>
+      <button @click="calcResult">=</button>
     </div>
   </div>
 </template>
@@ -32,7 +20,74 @@
 export default {
   data() {
     return {
-      input: '0'
+      numbers: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+      signs: ['%', '*', '/', '+', '-'],
+      firstNum: '0',
+      secondNum: '',
+      sign: '',
+      result: ''
+    }
+  },
+  methods: {
+    addNumber(num) {
+      if (this.result) this.clearAll()
+      if (this.sign) {
+        this.secondNum += num
+      } else {
+        this.firstNum += num
+      }
+    },
+    clearNumber() {
+      if (this.result) this.clearAll()
+      if (this.secondNum) {
+        this.secondNum = this.secondNum.slice(0, -1)
+      } else if (this.sign) {
+        this.sign = ''
+      } else {
+        this.firstNum = this.firstNum.slice(0, -1)
+      }
+    },
+    clearAll() {
+      this.sign = ''
+      this.result = ''
+      this.secondNum = ''
+      this.firstNum = '0'
+    },
+    clearCurrent() {
+      if (this.result) return
+      if (this.secondNum) {
+        this.secondNum = ''
+      } else {
+        this.firstNum = '0'
+        this.sign = ''
+      }
+    },
+    addSign(sign) {
+      this.sign = sign
+    },
+    calcResult() {
+      if (!this.secondNum) return
+      let a = parseInt(this.firstNum)
+      let b = parseInt(this.secondNum)
+      if (this.sign === '%') {
+        this.result = a / 100 * b
+      } else if (this.sign === '+') {
+        this.result = a + b
+      } else if (this.sign === '-') {
+        this.result = a - b
+      } else if (this.sign === '*') {
+        this.result = a * b
+      } else {
+        this.result = a / b
+      }
+    }
+  },
+  computed: {
+    second() {
+      return this.secondNum ? parseInt(this.secondNum) : ''
+    },
+    first() {
+      return parseInt(this.firstNum)
     }
   }
 }
@@ -57,6 +112,11 @@ $bg-disabled: #e3e3e3;
     border: 1px solid #ccc;
     text-align: right;
     font-size: 30px;
+    span.muted {
+      font-size: 14px;
+      color: #ccc;
+      display: block;
+    }
   }
   .buttons {
     display: grid;
