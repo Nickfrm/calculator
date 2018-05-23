@@ -1,6 +1,6 @@
 <template>
   <div id="calculator">
-    <div class="window"></div>
+    <div class="window">{{input}}</div>
     <div class="buttons">
       <button>CE</button>
       <button>C</button>
@@ -29,7 +29,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      input: '0'
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -43,12 +49,14 @@ $bg-disabled: #e3e3e3;
   width: 400px;
   padding: 20px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
   .window {
     background: #fff;
-    height: 50px;
-    width: 100%;
+    padding: 20px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
+    text-align: right;
+    font-size: 30px;
   }
   .buttons {
     display: grid;
