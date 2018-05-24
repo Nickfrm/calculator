@@ -5,12 +5,19 @@
       {{result}}
     </div>
     <div class="buttons">
+      <div class="memory">
+        <button>MC</button>
+        <button>MR</button>
+        <button>M+</button>
+        <button>M-</button>
+        <button>MS</button>
+      </div>
       <button @click="clearAll()">C</button>
       <button @click="clearCurrent">CE</button>
       <button @click="clearNumber">&lt;=</button>
       <button v-for="s in signs" @click="addSign(s)" :key="s">{{s}}</button>
       <button v-for="n in numbers" @click="addNumber(n)" class="number" :key="n">{{n}}</button>
-      <button disabled>.</button>
+      <!-- <button disabled>.</button> -->
       <button @click="calcResult">=</button>
     </div>
   </div>
@@ -20,7 +27,7 @@
 export default {
   data() {
     return {
-      numbers: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+      numbers: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
       signs: ['%', '*', '/', '+', '-'],
       firstNum: '0',
       secondNum: '',
@@ -123,6 +130,10 @@ $bg-disabled: #e3e3e3;
     grid: 40px / repeat(4, 1fr);
     grid-auto-rows: 40px;
     gap: 4px;
+    .memory {
+      grid-column: 1/-1;
+      align-self: center;
+    }
     button {
       background: $bg-symbols;
       border: 1px solid #ccc;
