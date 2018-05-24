@@ -6,18 +6,18 @@
     </div>
     <div class="buttons">
       <div class="memory">
-        <button>MC</button>
-        <button>MR</button>
-        <button>M+</button>
-        <button>M-</button>
-        <button>MS</button>
+        <button :class="{disabled:memory===null}" @click="clearMemory">MC</button>
+        <button :class="{disabled:memory===null}" @click="recallMemory">MR</button>
+        <button @click="addMemory">M+</button>
+        <button class="disabled">M-</button>
+        <button @click="storeMemory">MS</button>
       </div>
       <button @click="clearAll()">C</button>
       <button @click="clearCurrent">CE</button>
       <button @click="clearNumber">&lt;=</button>
       <button v-for="s in signs" @click="addSign(s)" :key="s">{{s}}</button>
       <button v-for="n in numbers" @click="addNumber(n)" class="number" :key="n">{{n}}</button>
-      <!-- <button disabled>.</button> -->
+      <!-- <button class="disabled">.</button> -->
       <button @click="calcResult">=</button>
     </div>
   </div>
@@ -32,7 +32,8 @@ export default {
       firstNum: '0',
       secondNum: '',
       sign: '',
-      result: ''
+      result: '',
+      memory: null
     }
   },
   methods: {
@@ -76,17 +77,43 @@ export default {
       if (!this.secondNum) return
       let a = parseInt(this.firstNum)
       let b = parseInt(this.secondNum)
-      if (this.sign === '%') {
-        this.result = a / 100 * b
-      } else if (this.sign === '+') {
-        this.result = a + b
-      } else if (this.sign === '-') {
-        this.result = a - b
-      } else if (this.sign === '*') {
-        this.result = a * b
-      } else {
-        this.result = a / b
+      switch (true) {
+        case this.sign === '%':
+          this.result = a / 100 * b
+          break
+        case this.sign === '+':
+          this.result = a + b
+          break
+        case this.sign === '-':
+          this.result = a - b
+          break
+        case this.sign === '*':
+          this.result = a * b
+          break
+        case this.sign === '/':
+          this.result = a / b
+          break
       }
+    },
+    storeMemory() {
+      if (this.result !== '') {
+        this.memory = parseInt(this.result)
+      } else if (this.secondNum !== '') {
+        this.memory = parseInt(this.secondNum)
+      } else {
+        this.memory = parseInt(this.firstNum)
+      }
+    },
+    recallMemory() {
+      this.addNumber(this.memory)
+    },
+    clearMemory() {
+      this.memory = null
+    },
+    addMemory() {
+      let current = this.memory
+      this.storeMemory()
+      this.memory += current
     }
   },
   computed: {
@@ -146,7 +173,7 @@ $bg-disabled: #e3e3e3;
       &:hover {
         background: #fff;
       }
-      &:disabled {
+      &.disabled {
         background: $bg-disabled;
         cursor: not-allowed;
       }
