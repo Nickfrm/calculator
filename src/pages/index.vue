@@ -8,8 +8,8 @@
       <div class="memory">
         <button :class="{disabled:memory===null}" @click="clearMemory">MC</button>
         <button :class="{disabled:memory===null}" @click="recallMemory">MR</button>
-        <button @click="addMemory">M+</button>
-        <button class="disabled">M-</button>
+        <button @click="changeMemory('+')">M+</button>
+        <button @click="changeMemory('-')">M-</button>
         <button @click="storeMemory">MS</button>
       </div>
       <button @click="clearAll()">C</button>
@@ -102,11 +102,11 @@ export default {
     },
     storeMemory() {
       if (this.result !== '') {
-        this.memory = parseInt(this.result)
+        this.memory = parseInt(this.result, 10)
       } else if (this.secondNum !== '') {
-        this.memory = parseInt(this.secondNum)
+        this.memory = parseInt(this.secondNum, 10)
       } else {
-        this.memory = parseInt(this.firstNum)
+        this.memory = parseInt(this.firstNum, 10)
       }
     },
     recallMemory() {
@@ -115,10 +115,17 @@ export default {
     clearMemory() {
       this.memory = null
     },
-    addMemory() {
+    changeMemory(sign) {
       let current = this.memory
       this.storeMemory()
-      this.memory += current
+      if (sign === '+') {
+        current += this.memory
+        this.memory = current
+      } else {
+        current -= this.memory
+        this.memory = current
+      }
+      console.log(this.memory)
     }
   },
   computed: {
