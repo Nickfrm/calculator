@@ -71,6 +71,11 @@ export default {
       }
     },
     addSign(sign) {
+      if (this.result) {
+        let first = this.result
+        this.clearAll()
+        this.firstNum = first
+      }
       this.sign = sign
     },
     calcResult() {
