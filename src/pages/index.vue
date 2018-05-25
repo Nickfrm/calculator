@@ -11,6 +11,11 @@
         <button @click="changeMemory('+')">M+</button>
         <button @click="changeMemory('-')">M-</button>
         <button @click="storeMemory">MS</button>
+        <button @click="showMemory">M &or;</button>
+        <div class="history" :class="{visible:isVisible}">
+          <div v-for="h in history" :key="s">{{h}}</div>
+
+        </div>
       </div>
       <button @click="clearAll()">C</button>
       <button @click="clearCurrent">CE</button>
@@ -33,7 +38,9 @@ export default {
       secondNum: '',
       sign: '',
       result: '',
-      memory: null
+      memory: null,
+      isVisible: false,
+      history: []
     }
   },
   methods: {
@@ -126,6 +133,9 @@ export default {
         this.memory = current
       }
       console.log(this.memory)
+    },
+    showMemory() {
+      this.isVisible = !this.isVisible
     }
   },
   computed: {
@@ -172,6 +182,21 @@ $bg-disabled: #e3e3e3;
     .memory {
       grid-column: 1/-1;
       align-self: center;
+      position: relative;
+      .history {
+        border: 1px solid #ccc;
+        background: #f7f7f7;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 20px;
+        width: 80px;
+        text-align: center;
+        display: none;
+        &.visible {
+          display: block;
+        }
+      }
     }
     button {
       background: $bg-symbols;
