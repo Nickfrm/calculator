@@ -12,18 +12,18 @@
         <button @click="changeMemory('-')">M-</button>
         <button @click="storeMemory">MS</button>
         <button @click="showMemory">M &or;</button>
-        <div class="history" :class="{visible:isVisible}">
-          <div v-for="h in history" :key="s">{{h}}</div>
-
-        </div>
       </div>
       <button @click="clearAll()">C</button>
       <button @click="clearCurrent">CE</button>
       <button @click="clearNumber">&lt;=</button>
       <button v-for="s in signs" @click="addSign(s)" :key="s">{{s}}</button>
       <button v-for="n in numbers" @click="addNumber(n)" class="number" :key="n">{{n}}</button>
-      <!-- <button class="disabled">.</button> -->
+      <button class="disabled">.</button>
       <button @click="calcResult">=</button>
+    </div>
+    <div class="history" :class="{visible:isVisible}">
+      <div v-for="h in history" :key="s">{{h}}sed</div>
+      <div>123</div>
     </div>
   </div>
 </template>
@@ -161,6 +161,8 @@ $bg-disabled: #e3e3e3;
   padding: 20px;
   border: 1px solid #ccc;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
   .window {
     background: #fff;
     padding: 20px;
@@ -182,21 +184,6 @@ $bg-disabled: #e3e3e3;
     .memory {
       grid-column: 1/-1;
       align-self: center;
-      position: relative;
-      .history {
-        border: 1px solid #ccc;
-        background: #f7f7f7;
-        position: absolute;
-        right: 0;
-        top: 0;
-        padding: 20px;
-        width: 80px;
-        text-align: center;
-        display: none;
-        &.visible {
-          display: block;
-        }
-      }
     }
     button {
       background: $bg-symbols;
@@ -214,6 +201,23 @@ $bg-disabled: #e3e3e3;
         background: $bg-disabled;
         cursor: not-allowed;
       }
+    }
+  }
+  .history {
+    box-sizing: border-box;
+    border-top: 1px solid #ccc;
+    background: #f7f7f7;
+    position: absolute;
+    right: 0;
+    top: 160px;
+    bottom: 0;
+    padding: 20px;
+    width: 100%;
+    text-align: right;
+    display: none;
+    overflow: auto;
+    &.visible {
+      display: block;
     }
   }
 }
