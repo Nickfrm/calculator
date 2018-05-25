@@ -22,8 +22,7 @@
       <button @click="calcResult">=</button>
     </div>
     <div class="history" :class="{visible:isVisible}">
-      <div v-for="h in history" :key="s">{{h}}sed</div>
-      <div>123</div>
+      <div v-for="h in history" :key="h">{{h}}</div>
     </div>
   </div>
 </template>
@@ -115,12 +114,14 @@ export default {
       } else {
         this.memory = parseInt(this.firstNum, 10)
       }
+      this.history.push(this.memory)
     },
     recallMemory() {
       this.addNumber(this.memory)
     },
     clearMemory() {
       this.memory = null
+      this.history = []
     },
     changeMemory(sign) {
       let current = this.memory
@@ -132,7 +133,8 @@ export default {
         current -= this.memory
         this.memory = current
       }
-      console.log(this.memory)
+      this.history = this.history.slice(0, -2)
+      this.history.push(this.memory)
     },
     showMemory() {
       this.isVisible = !this.isVisible
